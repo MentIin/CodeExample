@@ -5,9 +5,7 @@ using CodeBase.Infrastructure.States;
 using CodeBase.UI;
 using UnityEngine;
 using UnityEngine.Audio;
-#if YANDEX_GAMES
 
-#endif
 
 namespace CodeBase.Infrastructure
 {

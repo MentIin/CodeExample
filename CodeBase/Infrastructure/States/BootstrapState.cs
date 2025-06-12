@@ -83,28 +83,21 @@ namespace CodeBase.Infrastructure.States
                 musicMixerGroup));
             _allServices.RegisterSingle<PauseService>(new PauseService(_allServices.Single<IAudioService>()));
             
-            #if YANDEX_GAMES
-                    _yandexGame = Object.Instantiate(Resources.Load<YandexGame>("YandexGame"));
-                    Object.DontDestroyOnLoad(_yandexGame.gameObject);
-                    YandexGame.GetDataEvent += () =>
-                    {
-                        OnConnected(soundsMixerGroup, musicMixerGroup);
-                    };
-                    
-                    //_allServices.Single<IPersistentProgressService>().Progress.Language = yandexGame.
-            #else
+#if YANDEX_GAMES
+            _yandexGame = Object.Instantiate(Resources.Load<YandexGame>("YandexGame"));
+            Object.DontDestroyOnLoad(_yandexGame.gameObject);
+            YandexGame.GetDataEvent += () =>
+            {
                 OnConnected(soundsMixerGroup, musicMixerGroup);
-            #endif
-
-
-
+            };
+#else
+            OnConnected(soundsMixerGroup, musicMixerGroup);
+#endif
         }
 
         private void OnConnected(AudioMixerGroup soundsMixerGroup, AudioMixerGroup musicMixerGroup)
         {
             Debug.Log("OnConnected");
-
-
 
 
 #if YANDEX_GAMES
@@ -121,9 +114,7 @@ namespace CodeBase.Infrastructure.States
             _allServices.RegisterSingle<IUserInfoService>(new MockUserInfoService());
             _allServices.RegisterSingle<IAdsService>(new MockAdsService());
             
-            
             _allServices.RegisterSingle<IAnalyticsService>(new MockAnalyticsService());
-            
             
             _allServices.RegisterSingle<ISaveLoadService>(
                             new SaveLoadService(_allServices.Single<IPersistentProgressService>()));
@@ -141,9 +132,7 @@ namespace CodeBase.Infrastructure.States
             
             LocalizationManager.Read();
 
-            
             _gameStateMachine.InitializeStates(this);
-            
             
             _gameStateMachine.Enter<LoadProgressState>();
         }
